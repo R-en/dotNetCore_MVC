@@ -12,7 +12,13 @@ namespace exploreCalifornia.Controllers
 
     public class BlogController : Controller
     {
-        //[Route("")]
+        private readonly BlogDataContext _db;
+
+        public BlogController(BlogDataContext db){
+            _db = db;
+        }
+        
+        [Route("")]
         public IActionResult Index()
         {
            var posts = new[]
@@ -62,19 +68,22 @@ namespace exploreCalifornia.Controllers
             post.Author = User.Identity.Name;
             post.Posted = DateTime.Now;
 
+            _db.Posts.Add(post);
+            _db.SaveChanges();
+            
             return View();
         }
 
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        // public IActionResult Privacy()
+        // {
+        //     return View();
+        // }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        // public IActionResult Error()
+        // {
+        //     return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        // }
     }
 }
